@@ -1,4 +1,6 @@
 const users=require('../models/userModel')
+const 
+ jwt=require('jsonwebtoken')
 // register
  exports.registerController=async(req,res)=>{
     console.log("Inside registerController ");
@@ -36,8 +38,11 @@ exports.loginController=async(req,res)=>{
     try{
       const existingUser=await  users.findOne({email,password})
       if(existingUser){
+        // token generate
+        const token=jwt.sign({userId:existingUser._id},process.env.JWTPASSWORD)
         res.status(200).json({
-            user:existingUser
+            user:existingUser,
+            token
         })
 
 
